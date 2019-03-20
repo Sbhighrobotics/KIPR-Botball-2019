@@ -1,1 +1,48 @@
+#include <kipr/botball.h>
+
+int main()
+{
+    printf("MOVING!!!");
+    create_connect();
+    create_drive_direct(-300,-500);
+    msleep(400);
+    create_drive_direct(-500,500);
+    msleep(450);
+    create_drive_direct(-500,-500);
+    msleep(1700);
+  
+    create_drive_direct(-400,0);
+    msleep(2000);
+    create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+    create_drive_direct(400,0);
+   msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+     create_drive_direct(400,0);
+   msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+    create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+     create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+     create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+     create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+   
+    return 0;
+}
+
 
