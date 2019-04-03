@@ -1,0 +1,132 @@
+#include <kipr/botball.h>
+int speed = 2000;
+int leftMotor = 1;
+int rightMotor = 0;
+int highGrey= 2700;
+
+int lowBlack = 3500;
+
+void follow();
+void goTillBlack();
+void turnTillGrey();
+
+void turnLeft(int t)
+{
+    mav(rightMotor, speed);
+    mav(leftMotor, -speed);
+    msleep(t);
+    mav(rightMotor, 0);
+    mav(leftMotor, 0);
+}
+
+void turnRight(int t)
+{
+    mav(leftMotor, speed);
+    mav(rightMotor, -speed);
+    msleep(t);
+    mav(rightMotor, 0);
+    mav(leftMotor, 0);
+}
+
+void goForward(int t)
+{
+    mav(leftMotor, speed*-1);
+    mav(rightMotor, (speed)*.8);
+    msleep(t);
+    mav(rightMotor, 0);
+    mav(leftMotor, 0);
+}
+
+void wideTurn(int d, int t)
+{
+    if(d == 1)
+       {
+           mav(leftMotor, speed/3);
+           mav(rightMotor, speed);
+           msleep(t);
+           mav(rightMotor, 0);
+   		   mav(leftMotor, 0);
+        printf("I'm left");
+       }else
+       {
+        printf("I'm right");
+           mav(rightMotor, speed/3);
+           mav(leftMotor, speed);
+           msleep(t);
+           mav(rightMotor, 0);
+   		   mav(leftMotor, 0);
+       }
+}
+
+int main()
+{
+    camera_open();
+    //turnLeft(100);
+    //goForward(5000);
+    //wideTurn(1, 3000);
+    
+   //goTillBlack();
+    //mav(rightMotor,speed);
+    //msleep(1500);
+   while(lowBlack>0)
+   {
+       camera_update();
+       printf(get_object_bbox_width(0));
+   }
+   //follow();
+    return 0;
+}
+
+void goTillBlack()
+{
+    mav(rightMotor,speed);
+    mav(leftMotor,speed);
+    msleep(2000);
+    while(analog(0)<lowBlack)
+    {
+        mav(rightMotor,speed);
+        mav(leftMotor,speed);
+        msleep(100);
+        mav(rightMotor,0);
+        mav(leftMotor,0);      
+    }
+}
+
+
+
+void follow()
+{
+   
+    while(get_object_bbox_width(0,0)>40)
+        
+    {
+        
+        if(analog(0)<=highGrey)
+        {
+            mav(leftMotor,speed);
+            msleep(5);
+            mav(leftMotor,0);
+            printf("on grey");
+        }else if(analog(0)>=lowBlack)
+        {
+            mav(rightMotor,speed);
+            msleep(5);
+            mav(rightMotor,0);
+            printf("on black");
+        }else
+        {
+            mav(rightMotor,speed);
+            mav(leftMotor,speed);
+            msleep(100);
+            mav(rightMotor,0);
+            mav(leftMotor,0);
+        }
+        camera_update();
+    }
+}
+
+
+
+
+
+
