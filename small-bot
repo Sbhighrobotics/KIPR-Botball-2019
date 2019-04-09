@@ -2,19 +2,48 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2900;
-int middle = 3200;
-int lowBlack = 3300;
+int highGrey= 2555;
+int lowBlack = 3730;
 
 void follow();
 void goTillBlack();
 void turnTillGrey();
 void followCamera();
+void goForward(int time);
+void turnLeft(int time);
+
+
+int main()
+{
+    camera_open();
+    //turnLeft(100);
+    //goForward(5000);
+    //wideTurn(1, 3000);
+	goForward(2000);
+    goTillBlack();
+    //goForward(150);
+    turnLeft(1800);
+    //goTillBlack();
+    follow();
+    //mav(rightMotor,speed);
+    //mav(leftMotor,0);
+    
+   
+   
+    /*follow();
+    printf("\ndone1\n");
+    
+    followCamera();
+    printf("done2");
+    
+    */
+    return 0;
+}
 
 void turnLeft(int t)
 {
     mav(rightMotor, speed);
-    mav(leftMotor, -speed);
+    mav(leftMotor, 0);
     msleep(t);
     mav(rightMotor, 0);
     mav(leftMotor, 0);
@@ -31,11 +60,9 @@ void turnRight(int t)
 
 void goForward(int t)
 {
-    mav(leftMotor, speed*-1);
-    mav(rightMotor, (speed)*.8);
+    mav(leftMotor, speed);
+    mav(rightMotor, (speed)*.75);
     msleep(t);
-    mav(rightMotor, 0);
-    mav(leftMotor, 0);
 }
 
 void wideTurn(int d, int t)
@@ -59,63 +86,24 @@ void wideTurn(int d, int t)
     }
 }
 
-int main()
-{
-    camera_open();
-    //turnLeft(100);
-    //goForward(5000);
-    //wideTurn(1, 3000);
-
-    goTillBlack();
-    mav(rightMotor,speed);
-    mav(leftMotor,0);
-    msleep(1800);
-    //int c=1;
-    //int r=-1;
-    //int y = -1;
-    /*
-    while(c>0)
-    {
-        camera_update();
-        r = get_object_bbox_width(1,0);
-        y = get_object_bbox_width(0,0);
-        printf("%d,%d\n", r,y);
-
-
-    }
-    */
-    follow();
-    printf("\ndone1\n");
-    
-    followCamera();
-    printf("done2");
-    return 0;
-}
-
 void goTillBlack()
 {
-    mav(rightMotor,speed);
-    mav(leftMotor,speed);
-    msleep(2000);
     while(analog(0)<lowBlack)
     {
-        mav(rightMotor,speed);
-        mav(leftMotor,speed);
-        msleep(100);
-        mav(rightMotor,0);
-        mav(leftMotor,0);      
     }
+    mav(rightMotor,0);
+    mav(leftMotor,0);
 }
 
 
 
 void follow()
 {
-
-    int r = get_object_bbox_width(0,0);
+	double startTime = seconds();
+    printf("%f\n", startTime);
+    int r = 0;
     //int y = get_object_bbox_width(0,0);
-    while(get_object_count(0) ==0 || r < 12)
-
+    while(r < 12 )
     {
 
         if(analog(0)<=highGrey)
@@ -124,14 +112,14 @@ void follow()
             mav(leftMotor,speed);
             msleep(2);
 
-            printf("on grey");
+            //printf("on grey");
         }else if(analog(0)>=lowBlack)
         {
             mav(leftMotor,speed/2);
             mav(rightMotor,speed);
             msleep(2);
 
-            printf("on black");
+            //printf("on black");
         }else
         {
             mav(rightMotor,speed);
@@ -141,11 +129,16 @@ void follow()
             //mav(leftMotor,0);
         }
         camera_update();
-        r = get_object_bbox_width(0,0);
+        if (get_object_count(0) != 0) {
+	        r = get_object_bbox_width(0,0);
+            printf("%d\n", r);
+        }
+        
         //y = get_object_bbox_width(0,0);
     }
     mav(rightMotor,0);
     mav(leftMotor,0);
+    printf("%f\n", seconds() - startTime);
 }
 
 void followCamera()
@@ -168,6 +161,20 @@ void followCamera()
             msleep(100);
         }
     }
+     //int c=1;
+    //int r=-1;
+    //int y = -1;
+     /*
+    while(c>0)
+    {
+        camera_update();
+        r = get_object_bbox_width(1,0);
+        y = get_object_bbox_width(0,0);
+        printf("%d,%d\n", r,y);
+
+
+    }
+    */
 }
 
 
