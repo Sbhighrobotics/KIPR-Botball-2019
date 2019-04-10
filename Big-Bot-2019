@@ -1,16 +1,45 @@
 #include <kipr/botball.h>
-
+void DeadReckoning();
+void sensorFiremen();
 int main()
 {
-    printf("MOVING!!!");
+   
     create_connect();
+     printf("MOVING!!!");
     create_drive_direct(-300,-500);
-    msleep(400);
+    msleep(475);
     create_drive_direct(-500,500);
     msleep(450);
     create_drive_direct(-500,-500);
-    msleep(1700);
-  
+    msleep(1625);//1680
+
+  	sensorFiremen();
+   
+    return 0;
+}
+
+void sensorFiremen()
+{
+    int touchCount=0;
+    while(touchCount<=6)
+    {
+        if(digital(0)==0)
+        {
+            create_drive_direct(-500,0);
+  			msleep(100);
+            
+        }else
+        {
+            create_drive_direct(500,0);
+   			msleep(500);
+            touchCount++;
+        }
+    }
+}
+
+void DeadReckoning()
+{
+      
     create_drive_direct(-400,0);
     msleep(2000);
     create_drive_direct(400,0);
@@ -41,8 +70,5 @@ int main()
     msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
-   
-    return 0;
 }
-
 
