@@ -2,8 +2,8 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2700;
-int lowBlack = 3700;
+int highGrey= 2600;
+int lowBlack = 3600;
 
 void follow();
 void goTillBlack();
@@ -16,20 +16,19 @@ int main()
 {
     shut_down_in(60);
     camera_open();
-    
+
     //goForward(5000);
     //goForward(150);
     //goTillBlack();
-    
-    goForward(2000); 
-  
+    goForward(2000);
     goTillBlack();
-      mav(rightMotor,speed);
+    mav(rightMotor,speed);
     mav(leftMotor,0);
-    msleep(1200);
+    msleep(1400);
     follow();
- 	followCamera();
-    
+    reverseFollowCamera();
+
+
     //mav(rightMotor,speed);
     //mav(leftMotor,0);
     /*follow();
@@ -63,10 +62,10 @@ void goTillBlack()
 
 void follow()
 {
-	//double startTime = seconds();
+    //double startTime = seconds();
     //printf("%f\n", startTime);
     int r = 0;
-    while(r < 6)
+    while(r < 8)
     {
 
         if(analog(0)<=highGrey)
@@ -92,59 +91,78 @@ void follow()
             //mav(leftMotor,0);
         }
         camera_update();
-        
+
         if (get_object_count(0) != 0) 
         {
-	        r = get_object_bbox_width(0,0);
+            r = get_object_bbox_width(0,0);
             printf("%d\n", r);
         }
-        
-    
+
+
     }
     mav(rightMotor,0);
     mav(leftMotor,0);
-   // printf("%f\n", seconds() - startTime);
+    // printf("%f\n", seconds() - startTime);
 }
 
 
 void followCamera()
 {
+
     int width = get_object_bbox_width(0,0);
     int x=0; 
-    while(width<12)
+    while(width<25)
     {
         camera_update();
-        x= get_object_center_x(0,0);
-        if(x<90)
+        if(get_object_count(0) != 0)
         {
-            mav(rightMotor, speed);
-             mav(leftMotor, speed/4);
-            msleep(100);
-        }
-        if(x>90)
-        {
-             mav(leftMotor, speed);
-             mav(rightMotor, speed/4);
-            msleep(100);
+            width = get_object_bbox_width(0,0);
+            x= get_object_center_x(0,0);
+            printf("%d\n",x);
+            if(x<35)
+            {
+                mav(rightMotor, speed);
+                mav(leftMotor, speed/2);
+                msleep(50);
+            }else if(x>=35 )
+            {
+                mav(leftMotor, speed);
+                mav(rightMotor, speed/2);
+                msleep(50);
+            }
         }
     }
-    /*
-     //int c=1;
-    //int r=-1;
-    //int y = -1;
-     
-    while(c>0)
-    {
-        camera_update();
-        r = get_object_bbox_width(1,0);
-        y = get_object_bbox_width(0,0);
-        printf("%d,%d\n", r,y);
-
-
-    }
-    */
 }
 
+void reverseFollowCamera()
+{
+    int a = 0;
+    while(a==0)
+    {
+        printf("I might be working");
+        camera_update();
+        if(get_object_count(0) != 0)
+        {
+            printf("I see it");
+            int x = get_object_center_x(0,0);
+            printf("%d\n",x);
+            if(x < 100 || x >= 160)
+            {
+                goForward(2000);
+            }else
+            {
+                printf("I'm turning");
+                mav(1, 1000);
+                msleep(500);
+                goForward(2000);
+                break;
+            }
+        }else
+        {
+            goForward(2000);
+        }
+    }
+}
 
 
 
