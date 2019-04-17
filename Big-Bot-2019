@@ -6,12 +6,12 @@ int main()
    
     create_connect();
      printf("MOVING!!!");
-    create_drive_direct(-300,-500);
-    msleep(475);
+    create_drive_direct(-500,-500);
+    msleep(550);
     create_drive_direct(-500,500);
     msleep(450);
     create_drive_direct(-500,-500);
-    msleep(1625);//1680
+    msleep(1700);//1680
 
   	sensorFiremen();
    
@@ -25,12 +25,12 @@ void sensorFiremen()
     {
         if(digital(0)==0)
         {
-            create_drive_direct(-500,0);
+            create_drive_direct(-500,0); //forward turn
   			msleep(100);
             
         }else
         {
-            create_drive_direct(500,0);
+            create_drive_direct(500,0); //backward turn
    			msleep(500);
             touchCount++;
         }
