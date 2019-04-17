@@ -2,13 +2,14 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2600;
-int lowBlack = 3600;
+int highGrey= 2700;
+int lowBlack = 3700;
 
 void follow();
 void goTillBlack();
 void followCamera();
 void goForward(int time);
+void reverseFollowCamera();
 
 
 
@@ -20,7 +21,12 @@ int main()
     //goForward(5000);
     //goForward(150);
     //goTillBlack();
-    goForward(2000);
+    goForward(500);
+    mav(leftMotor, 0);
+    mav(rightMotor, 0);
+    mav(leftMotor,speed);
+    msleep(450);
+    goForward(2300);
     goTillBlack();
     mav(rightMotor,speed);
     mav(leftMotor,0);
@@ -65,9 +71,10 @@ void follow()
     //double startTime = seconds();
     //printf("%f\n", startTime);
     int r = 0;
-    while(r < 8)
+    int count=0;
+    while(count < 55 && r<11)
     {
-
+		printf("%d\n",count);
         if(analog(0)<=highGrey)
         {
             mav(rightMotor,speed/2);
@@ -92,13 +99,13 @@ void follow()
         }
         camera_update();
 
-        if (get_object_count(0) != 0) 
+        if (get_object_count(0) != 0 && get_object_count(1) != 0 && (get_object_center_x(1,0) - get_object_center_x(0,0)) < 15) 
         {
-            r = get_object_bbox_width(0,0);
+            r = get_object_bbox_width(1,0);
             printf("%d\n", r);
         }
 
-
+		count++;
     }
     mav(rightMotor,0);
     mav(leftMotor,0);
@@ -141,19 +148,21 @@ void reverseFollowCamera()
     {
         printf("I might be working");
         camera_update();
-        if(get_object_count(0) != 0)
+        if(get_object_count(0) != 0 && get_object_count(1) != 0)
         {
             printf("I see it");
-            int x = get_object_center_x(0,0);
+            int x = (get_object_center_x(0,0)+get_object_center_x(1,0))/2;
             printf("%d\n",x);
-            if(x < 100 || x >= 160)
+            if(x > 140 && x <= 160)
             {
-                goForward(2000);
+                printf("I'm going forward");
+                goForward(3000);
+                break;
             }else
             {
                 printf("I'm turning");
                 mav(1, 1000);
-                msleep(500);
+                msleep(700);
                 goForward(2000);
                 break;
             }
