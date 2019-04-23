@@ -4,13 +4,15 @@ int leftMotor = 1;
 int rightMotor = 0;
 int highGrey= 2700;
 int lowBlack = 3700;
+int highWhite =950;
+int lowBlue =1200;
 
 void follow();
 void goTillBlack();
 void followCamera();
 void goForward(int time);
 void reverseFollowCamera();
-
+void followBlue();
 
 
 int main()
@@ -18,9 +20,7 @@ int main()
     shut_down_in(60);
     camera_open();
 
-    //goForward(5000);
-    //goForward(150);
-    //goTillBlack();
+/*
     goForward(500);
     mav(leftMotor, 0);
     mav(rightMotor, 0);
@@ -35,12 +35,8 @@ int main()
     reverseFollowCamera();
 
 
-    //mav(rightMotor,speed);
-    //mav(leftMotor,0);
-    /*follow();
-    printf("\ndone1\n");
-    printf("done2");
-    */
+  */
+    followBlue();
     return 0;
 }
 
@@ -74,7 +70,7 @@ void follow()
     int count=0;
     while(count < 55 && r<11)
     {
-		printf("%d\n",count);
+        printf("%d\n",count);
         if(analog(0)<=highGrey)
         {
             mav(rightMotor,speed/2);
@@ -105,7 +101,7 @@ void follow()
             printf("%d\n", r);
         }
 
-		count++;
+        count++;
     }
     mav(rightMotor,0);
     mav(leftMotor,0);
@@ -155,21 +151,53 @@ void reverseFollowCamera()
             printf("%d\n",x);
             if(x > 140 && x <= 160)
             {
-                printf("I'm going forward");
-                goForward(3000);
+                printf("I'm going forward differently");
+                mav(1, 1000);
+                msleep(150);
+                goForward(2550);
                 break;
             }else
             {
                 printf("I'm turning");
                 mav(1, 1000);
-                msleep(700);
-                goForward(2000);
+                msleep(600);
+                goForward(2550);
                 break;
             }
         }else
         {
-            goForward(2000);
+            printf("Why did I do this");
+            mav(1, 1000);
+            msleep(150);
+            goForward(2550);
+            break;
         }
+    }
+}    
+
+void followBlue()
+{
+    int count=0;
+    while(count<40)
+    {
+        if(analog(0)>=lowBlue)
+        {
+            mav(rightMotor,speed/3);
+            mav(leftMotor,speed);
+            msleep(2);
+        }else if(analog(0)<=highWhite)
+        {
+            mav(leftMotor,speed/3);
+            mav(rightMotor,speed);
+            msleep(2);
+        }else
+        {
+            mav(rightMotor,speed);
+            mav(leftMotor,speed);
+            msleep(100);
+        }
+        camera_update();
+        count++;
     }
 }
 
