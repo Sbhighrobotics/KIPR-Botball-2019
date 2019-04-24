@@ -1,45 +1,85 @@
 #include <kipr/botball.h>
+#include <kipr/botball.h>
 void DeadReckoning();
 void sensorFiremen();
+int fTravel = -200; // first travel distance before turning. edit as needed. needs to be negative since roomba is moving negatively.
+int turn = 75;
+int turn2 = 50;
+int sTravel = -770;
 int main()
 {
-   
+	
     create_connect();
-     printf("MOVING!!!");
-    create_drive_direct(-500,-500);
-    msleep(550);
-    create_drive_direct(-500,500);
-    msleep(450);
-    create_drive_direct(-500,-500);
-    msleep(1700);//1680
-
-  	sensorFiremen();
+    create_stop();
+     set_create_total_angle(0);
+    set_create_distance(0);
+    printf("MOVING!!!");
+	
+    int x = 0;
+	
    
-    return 0;
+    while(x >= fTravel)
+    {
+        create_drive_direct(-500,-500);
+        x = get_create_distance();
+        printf("%d \n",x);
+        msleep(1);
+    }
+	
+    set_create_total_angle(0);
+    x = 0;
+    while(x <= turn) // momentum should get it to approx 90 or other mark you're trying to get to
+    {
+        create_drive_direct(-125,125);
+        x = get_create_total_angle();
+
+
+    }
+    create_stop();
+    printf("Turned  %d \n",x);
+
+
+    set_create_distance(0);
+    x = 0;
+    while(x >= sTravel)
+    {
+        create_drive_direct(-500,-500);
+        x = get_create_distance();
+
+        msleep(1);
+        printf("Goingpt2 %d \n",x);
+    }
+   
+  
+   
+    create_stop();
+    printf("Turned  %d \n",x);
+    
+    	sensorFiremen();
+  
+   return 0;
 }
+
+
 
 void sensorFiremen()
 {
-    int touchCount=0;
-    while(touchCount<=6)
+    set_create_distance(0);
+    set_create_total_angle(0);
+ 
+    while(get_create_total_angle()>=1800)
     {
-        if(digital(0)==0)
-        {
-            create_drive_direct(-500,0); //forward turn
-  			msleep(100);
-            
-        }else
-        {
-            create_drive_direct(500,0); //backward turn
-   			msleep(500);
-            touchCount++;
-        }
+      
+            create_drive_direct(-125,125); //forward turn
+            msleep(50);
+
+        
     }
 }
 
 void DeadReckoning()
 {
-      
+
     create_drive_direct(-400,0);
     msleep(2000);
     create_drive_direct(400,0);
@@ -47,28 +87,29 @@ void DeadReckoning()
     create_drive_direct(-400,0);
     msleep(600);
     create_drive_direct(400,0);
-   msleep(600);
-    create_drive_direct(-400,0);
     msleep(600);
-     create_drive_direct(400,0);
-   msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
     create_drive_direct(400,0);
     msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
-     create_drive_direct(400,0);
+    create_drive_direct(400,0);
     msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
-     create_drive_direct(400,0);
+    create_drive_direct(400,0);
     msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
-     create_drive_direct(400,0);
+    create_drive_direct(400,0);
+    msleep(600);
+    create_drive_direct(-400,0);
+    msleep(600);
+    create_drive_direct(400,0);
     msleep(600);
     create_drive_direct(-400,0);
     msleep(600);
 }
+
 
