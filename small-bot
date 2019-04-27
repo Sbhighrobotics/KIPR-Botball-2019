@@ -21,8 +21,8 @@ void toDRZ();
 
 int main()
 {
-    
-    shut_down_in(60);
+    wait_for_light(1);
+    shut_down_in(100);
     camera_open();
 	enable_servos();
     set_servo_position(0,1022);
@@ -39,7 +39,7 @@ int main()
     follow();
     reverseFollowCamera();
   followBlue();
-    
+    toDRZ();
 
 
 
@@ -161,7 +161,7 @@ void reverseFollowCamera()
                 printf("I'm going forward differently");
                 mav(1, 1000);
             	msleep(60);
-                goForward(2900);
+                goForward(3100);
                 toBlueL();
                 break;
             }else
@@ -182,7 +182,7 @@ void reverseFollowCamera()
             printf("Why did I do this");
             mav(1, 1000);
             msleep(100);
-            goForward(2700);
+            goForward(3100);
             toBlueL();
             break;
         }
@@ -245,7 +245,7 @@ void toBlueL()
     msleep(1700);
     mav(leftMotor, 2000);
     mav(rightMotor, 2000);
-    msleep(1200);
+    msleep(1500);
 }
 
 void toDRZ()
