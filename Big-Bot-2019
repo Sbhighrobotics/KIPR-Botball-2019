@@ -1,23 +1,24 @@
 #include <kipr/botball.h>
-#include <kipr/botball.h>
+
 void DeadReckoning();
 void sensorFiremen();
-int fTravel = -200; // first travel distance before turning. edit as needed. needs to be negative since roomba is moving negatively.
+int fTravel = -200; //Other side is -125 // first travel distance before turning. edit as needed. needs to be negative since roomba is moving negatively.
 int turn = 75;
 int turn2 = 50;
-int sTravel = -770;
+int sTravel = -750;
+int tTravel = -500;
 int main()
 {
-	
+	wait_for_light(0);
     create_connect();
     create_stop();
-     set_create_total_angle(0);
+    set_create_total_angle(0);
     set_create_distance(0);
-    printf("MOVING!!!");
-	
+    printf("MOVING!!!\n");
+
     int x = 0;
-	
-   
+
+
     while(x >= fTravel)
     {
         create_drive_direct(-500,-500);
@@ -25,7 +26,7 @@ int main()
         printf("%d \n",x);
         msleep(1);
     }
-	
+
     set_create_total_angle(0);
     x = 0;
     while(x <= turn) // momentum should get it to approx 90 or other mark you're trying to get to
@@ -50,14 +51,24 @@ int main()
         printf("Goingpt2 %d \n",x);
     }
    
-  
-   
+
     create_stop();
     printf("Turned  %d \n",x);
+
+    sensorFiremen();
+
+    set_create_distance(0);
+    x = 0;
+    while(x >= tTravel)
+    {
+        create_drive_direct(-500,-500);
+        x = get_create_distance();
+
+        msleep(1);
+        printf("Goingpt2 %d \n",x);
+    }
     
-    	sensorFiremen();
-  
-   return 0;
+    return 0;
 }
 
 
@@ -66,15 +77,17 @@ void sensorFiremen()
 {
     set_create_distance(0);
     set_create_total_angle(0);
- 
-    while(get_create_total_angle()>=1800)
-    {
-      
-            create_drive_direct(-125,125); //forward turn
-            msleep(50);
 
-        
+    while(get_create_total_angle()<=1705)
+    {
+
+        create_drive_direct(-300,300); //forward turn
+        msleep(50);
+
+
     }
+    create_stop();
+    shut_down_in(120);
 }
 
 void DeadReckoning()
