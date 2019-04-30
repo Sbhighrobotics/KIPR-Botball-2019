@@ -2,10 +2,10 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2800;
-int lowBlack = 3700;
-int highWhite =850;
-int lowBlue = 1200;
+int highGrey= 2650;
+int lowBlack = 3750;
+int highWhite =950;
+int lowBlue = 1250;
 
 
 
@@ -18,19 +18,21 @@ void followBlue();
 void toBlueR();
 void toBlueL();
 void toDRZ();
+void goTillWhite();
 
 int main()
 {
-    wait_for_light(1);
+    //msleep(25000);
+    //wait_for_light(1);
     shut_down_in(100);
     camera_open();
-	enable_servos();
+    enable_servos();
     set_servo_position(0,1022);
     msleep(100);
     mav(leftMotor, 0);
     mav(rightMotor, 0);
     mav(leftMotor,speed);
-    msleep(400);
+    msleep(350);
     goForward(1800);
     goTillBlack();
     mav(rightMotor,speed);
@@ -38,12 +40,12 @@ int main()
     msleep(1400);
     follow();
     reverseFollowCamera();
-  followBlue();
+    followBlue();
     toDRZ();
 
 
 
-  /*
+    /*
     followBlue();
     mav(1,2000);
     mav(0,0);
@@ -72,16 +74,37 @@ void goTillBlack()
     mav(rightMotor,0);
     mav(leftMotor,0);
 }
-
+void goTillWhite()
+{
+    printf("Function engaged\n");
+    int i=1;
+    int limit=0;
+    while(i<100)
+    {
+        if(analog(0)<highWhite)
+        {
+            limit++;
+            printf("%d", limit);
+        }
+        if(limit>10)
+        {
+            break;
+        }
+     
+    }
+    mav(rightMotor,0);
+    mav(leftMotor,0);
+    printf("Function disengaged\n");
+}
 
 
 void follow()
 {
     //double startTime = seconds();
     //printf("%f\n", startTime);
-  
+
     int count=0;
-    while(count < 52)// && r<14)
+    while(count < 60)// && r<14)
     {
         printf("%d\n",count);
         if(analog(0)<=highGrey)
@@ -107,7 +130,7 @@ void follow()
             //mav(leftMotor,0);
         }
 
-		camera_update();
+        camera_update();
         count++;
     }
     mav(rightMotor,0);
@@ -159,9 +182,10 @@ void reverseFollowCamera()
             if(x > 140 && x <= 160)
             {
                 printf("I'm going forward differently");
-                mav(1, 1000);
-            	msleep(60);
-                goForward(3100);
+                mav(leftMotor, speed);
+                mav(rightMotor, speed);
+                goTillWhite();
+                goForward(350);
                 toBlueL();
                 break;
             }else
@@ -169,20 +193,23 @@ void reverseFollowCamera()
                 printf("I'm turning");
                 mav(0,1000);
                 mav(1,1000);
-                msleep(700);
+                msleep(500);
                 mav(0,0);
                 mav(1, 1000);
-                msleep(625);
-                goForward(2750);
+                msleep(450);
+                goForward(200);
+                goTillBlack();
+                goForward(350);
                 toBlueR();
                 break;
             }
         }else
         {
             printf("Why did I do this");
-            mav(1, 1000);
-            msleep(100);
-            goForward(3100);
+            mav(leftMotor, speed);
+            mav(rightMotor, speed);
+            goTillWhite();
+            goForward(350);
             toBlueL();
             break;
         }
@@ -193,7 +220,7 @@ void followBlue()
 {
     printf("Hi Joy\n");
     int count=0;
-    while(count<500)
+    while(count<370)
     {
         if(analog(0)>=lowBlue)
         {
@@ -214,7 +241,7 @@ void followBlue()
             msleep(2);
             //printf("else\n");
         }
-      
+
         printf("Update %d \n", count);
         count++;
     }
@@ -229,10 +256,13 @@ void toBlueR()
     msleep(2000);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1500);
-    mav(leftMotor, 2000);
-    mav(rightMotor, 2000);
-    msleep(1100);
+    msleep(1300);
+    while(analog(0)<lowBlue)
+    {
+        mav(leftMotor, 2000);
+        mav(rightMotor, 2000);
+        msleep(50);
+    }
 }
 
 void toBlueL()
@@ -242,17 +272,20 @@ void toBlueL()
     msleep(1000);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1700);
-    mav(leftMotor, 2000);
-    mav(rightMotor, 2000);
-    msleep(1500);
+    msleep(1550);
+    while(analog(0)<lowBlue)
+    {
+        mav(leftMotor, 2000);
+        mav(rightMotor, 2000);
+        msleep(50);
+    }
 }
 
 void toDRZ()
 {
     mav(leftMotor, speed);
     mav(rightMotor, 0);
-    msleep(1300);
+    msleep(1200);
     mav(leftMotor, speed);
     mav(rightMotor, speed);
     goTillBlack();
