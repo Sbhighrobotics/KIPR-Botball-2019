@@ -52,6 +52,12 @@ int main()
     msleep(1000);
     goForward(3000);
     */
+    printf("MEOW");
+     enable_servos();
+ 	set_servo_position(0,1600);
+     set_servo_position(0,400);
+     set_servo_position(0,1600);
+     set_servo_position(0,400);
     return 0;
 }
 
