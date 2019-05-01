@@ -2,10 +2,10 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2650;
-int lowBlack = 3750;
-int highWhite =950;
-int lowBlue = 1250;
+int highGrey= 2500;
+int lowBlack = 3600;
+int highWhite =300;
+int lowBlue = 450;
 
 
 
@@ -22,7 +22,7 @@ void goTillWhite();
 
 int main()
 {
-    //msleep(25000);
+    msleep(25000);
     //wait_for_light(1);
     shut_down_in(100);
     camera_open();
@@ -196,7 +196,7 @@ void reverseFollowCamera()
                 msleep(500);
                 mav(0,0);
                 mav(1, 1000);
-                msleep(450);
+                msleep(480);
                 goForward(200);
                 goTillBlack();
                 goForward(350);
@@ -256,12 +256,14 @@ void toBlueR()
     msleep(2000);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1300);
-    while(analog(0)<lowBlue)
+    msleep(1200);
+    int count=0;
+    while(analog(0)<lowBlue && count<500)
     {
         mav(leftMotor, 2000);
         mav(rightMotor, 2000);
         msleep(50);
+        count++;
     }
 }
 
@@ -272,12 +274,14 @@ void toBlueL()
     msleep(1000);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1550);
-    while(analog(0)<lowBlue)
+    msleep(1500);
+  int count=0;
+    while(analog(0)<lowBlue && count<500)
     {
         mav(leftMotor, 2000);
         mav(rightMotor, 2000);
         msleep(50);
+        count++;
     }
 }
 
