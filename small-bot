@@ -42,31 +42,31 @@ int main()
     msleep(1400);
     follow();
     reverseFollowCamera();
-
     toDRZ();
-
-
-
-    /*
-    followBlue();
-    mav(1,2000);
-    mav(0,0);
-    msleep(1000);
-    goForward(3000);
-    */
-      
     wag();
     return 0;
 }
 
 void wag()
 {
-     printf("MEOW");
-     enable_servos();
- 	set_servo_position(0,1600);
-     set_servo_position(0,400);
+    printf("MEOW");
+    enable_servos();
+    set_servo_position(0,1600);
+    msleep(500);
+    set_servo_position(0,400);
+    msleep(500);
+    set_servo_position(0,1600);
+    msleep(500);
+    set_servo_position(0,400);
+    msleep(500);
      set_servo_position(0,1600);
-     set_servo_position(0,400);
+   msleep(500);
+    set_servo_position(0,400);
+    msleep(500);
+     set_servo_position(0,1600);
+    msleep(500);
+    set_servo_position(0,400);
+    msleep(500);
 }
 
 
@@ -102,7 +102,7 @@ void goTillWhite()
         {
             break;
         }
-     
+
     }
     mav(rightMotor,0);
     mav(leftMotor,0);
@@ -288,7 +288,7 @@ void toBlueL()
     mav(leftMotor,2000);
     mav(rightMotor,0);
     msleep(1550);
-  int count=0;
+    int count=0;
     while(analog(0)<lowBlue && count<500)
     {
         mav(leftMotor, 2000);
@@ -314,6 +314,8 @@ void toDRZ()
     mav(leftMotor, speed);
     mav(rightMotor, speed);
     msleep(200);
+    mav(leftMotor, 0);
+    mav(rightMotor, 0);
 }
 
 
