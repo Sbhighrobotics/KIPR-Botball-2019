@@ -2,10 +2,10 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2500;
+int highGrey= 2600;
 int lowBlack = 3600;
-int highWhite =300;
-int lowBlue = 450;
+int highWhite =950;
+int lowBlue = 1000;
 
 
 
@@ -22,12 +22,12 @@ void goTillWhite();
 
 int main()
 {
-    msleep(25000);
+   // msleep(25000);
     //wait_for_light(1);
     shut_down_in(100);
     camera_open();
     enable_servos();
-    set_servo_position(0,1022);
+    set_servo_position(0,1000);
     msleep(100);
     mav(leftMotor, 0);
     mav(rightMotor, 0);
@@ -40,20 +40,8 @@ int main()
     msleep(1400);
     follow();
     reverseFollowCamera();
-    followBlue();
+
     toDRZ();
-    
-    //VICTORY sWAG
-    printf("MEOW");
-    enable_servos();
-	set_servo_position(0,1600);
-    set_servo_position(0,400);
-    set_servo_position(0,1600);
-    set_servo_position(0,400);
-    return 0;
-
-
-
 
 
 
@@ -209,7 +197,7 @@ void reverseFollowCamera()
                 mav(0,0);
                 mav(1, 1000);
                 msleep(480);
-                goForward(200);
+                goForward(220);
                 goTillBlack();
                 goForward(350);
                 toBlueR();
@@ -228,11 +216,11 @@ void reverseFollowCamera()
     }
 }    
 
-void followBlue()
+void followBlue(int howLong)
 {
     printf("Hi Joy\n");
     int count=0;
-    while(count<370)
+    while(count<howLong)
     {
         if(analog(0)>=lowBlue)
         {
@@ -265,10 +253,10 @@ void toBlueR()
 {
     mav(0,-2000);
     mav(1,-2000);
-    msleep(2000);
+    msleep(1900);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1200);
+    msleep(1350);
     int count=0;
     while(analog(0)<lowBlue && count<500)
     {
@@ -277,6 +265,7 @@ void toBlueR()
         msleep(50);
         count++;
     }
+    followBlue(350);
 }
 
 void toBlueL()
@@ -295,13 +284,14 @@ void toBlueL()
         msleep(50);
         count++;
     }
+    followBlue(420);
 }
 
 void toDRZ()
 {
     mav(leftMotor, speed);
     mav(rightMotor, 0);
-    msleep(1200);
+    msleep(1050);
     mav(leftMotor, speed);
     mav(rightMotor, speed);
     goTillBlack();
