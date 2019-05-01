@@ -2,10 +2,10 @@
 int speed = 2000;
 int leftMotor = 1;
 int rightMotor = 0;
-int highGrey= 2600;
-int lowBlack = 3600;
+int highGrey= 2650;
+int lowBlack = 3650;
 int highWhite =950;
-int lowBlue = 1000;
+int lowBlue = 1150;
 
 
 
@@ -19,11 +19,13 @@ void toBlueR();
 void toBlueL();
 void toDRZ();
 void goTillWhite();
+void wag();
 
 int main()
 {
-   // msleep(25000);
-    //wait_for_light(1);
+    
+    wait_for_light(1);
+    msleep(25000);
     shut_down_in(100);
     camera_open();
     enable_servos();
@@ -52,16 +54,20 @@ int main()
     msleep(1000);
     goForward(3000);
     */
-    printf("MEOW");
+      
+    wag();
+    return 0;
+}
+
+void wag()
+{
+     printf("MEOW");
      enable_servos();
  	set_servo_position(0,1600);
      set_servo_position(0,400);
      set_servo_position(0,1600);
      set_servo_position(0,400);
-    return 0;
 }
-
-
 
 
 void goForward(int t)
@@ -191,7 +197,7 @@ void reverseFollowCamera()
                 mav(leftMotor, speed);
                 mav(rightMotor, speed);
                 goTillWhite();
-                goForward(350);
+                goForward(360);
                 toBlueL();
                 break;
             }else
@@ -215,7 +221,7 @@ void reverseFollowCamera()
             mav(leftMotor, speed);
             mav(rightMotor, speed);
             goTillWhite();
-            goForward(350);
+            goForward(360);
             toBlueL();
             break;
         }
@@ -278,10 +284,10 @@ void toBlueL()
 {
     mav(rightMotor,-2000);
     mav(leftMotor,-2000);
-    msleep(1000);
+    msleep(1100);
     mav(leftMotor,2000);
     mav(rightMotor,0);
-    msleep(1500);
+    msleep(1550);
   int count=0;
     while(analog(0)<lowBlue && count<500)
     {
@@ -290,7 +296,7 @@ void toBlueL()
         msleep(50);
         count++;
     }
-    followBlue(420);
+    followBlue(500);
 }
 
 void toDRZ()
